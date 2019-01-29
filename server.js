@@ -10,6 +10,7 @@ const databaseName = 'ados-javascript-db';
 const databasePort = 59682;
 
 const booksRoutes = require('./routes/books');
+const authorsRoutes = require('./routes/authors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -25,6 +26,7 @@ mongoose.connect(
 
 app.get('/', (req, res) => res.send('Knygynas')); // ++
 app.use('/books', booksRoutes);
+app.use('/authors', authorsRoutes);
 
 
 

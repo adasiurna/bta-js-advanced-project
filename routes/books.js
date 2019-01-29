@@ -2,7 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/books');
 
-router.get('/', (req, res) => res.send('Grazinam visas knygas')); // ++
+router.get('/', (req, res) => {
+  console.log('Grazinam visas knygas');
+
+  Book.find({}).exec((error, books) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else {
+      console.log(books);
+      res.send(books);
+    }
+  })
+}); // ++
+
+
+
+
 router.get('/:id', (req, res) => res.send('Grazinam viena knyga pagal ID')); // ++
 
 
