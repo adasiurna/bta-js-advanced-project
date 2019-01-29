@@ -20,10 +20,11 @@ router.post('/', (req, res) => {
 
   newBook.save((error, book) => {
     if (error) {
-      res.send('Ivyko klaida!');
+      console.log(error);
+      res.status(500).send(error.message);
     } else {
       console.log(book);
-      res.send(book);
+      res.status(201).send(book);
     }
   })
 });
