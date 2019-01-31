@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 const Book = require('../models/books');
+
+moment.locale('lt');
 
 router.get('/', (req, res) => {
   console.log('Grazinam visas knygas');
@@ -10,12 +13,10 @@ router.get('/', (req, res) => {
       res.status(500).send(error.message);
     } else {
       console.log(books);
-      res.send(books);
+      res.send(books.map(book => mapToBook(book)));
     }
   })
 }); // ++
-
-
 
 
 router.get('/bestseller', (req, res) => {
@@ -26,28 +27,10 @@ router.get('/bestseller', (req, res) => {
       res.status(500).send(error.message);
     } else {
       console.log(books);
-      res.send(books);
+      res.send(books.map(book => mapToBook(book)));
     }
   })
 }); // ++
-
-
-
-
-router.get('/drama', (req, res) => {
-  console.log('Grazinam visus bestselerius');
-
-  Book.find({ category: "Drama" }).exec((error, books) => {
-    if (error) {
-      res.status(500).send(error.message);
-    } else {
-      console.log(books);
-      res.send(books);
-    }
-  })
-}); // ++
-
-
 
 
 router.get('/:id', (req, res) => {
@@ -56,7 +39,7 @@ router.get('/:id', (req, res) => {
       res.status(500).send(error.message);
     } else {
       console.log(book);
-      res.send(book);
+      res.send(mapToBook(book));
     }
   })
 });
@@ -87,11 +70,80 @@ router.post('/', (req, res) => {
 });
 
 
+router.put('/:id', (req, res) => {
+  console.log('Atnaujinam pasirinkita knyga pagal ID');
+  Book.findByIdAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: Object.assign(req.body),
+    },
+    { new: true },
+    (error, book) => {
+      if (error) {
+        res.status(500).send(error.message);
+      } else {
+        console.log(book);
+        res.status(200).send(book);
+      }
+    }
+  )
+}); // ++
 
 
+router.delete('/:id', (req, res) => {
+  console.log('Istrinam viena knyga pagal ID');
+  Book.findByIdAndRemove(
+    { _id: req.params.id, },
+    (error, success) => {
+      if (error) {
+        res.status(500).send(error.message);
+      } else {
+        console.log(success);
+        res.status(200).send(success);
+      }
+    }
+  )
+}); // ++
 
-router.put('/:id', (req, res) => res.send('Atnaujinam pasirinkita knyga pagal ID')); // ++
-router.delete('/:id', (req, res) => res.send('Istrinam viena knyga pagal ID')); // ++
 
+const mapToBook = book => {
+  return {
+    pavadinimas: `${book.author}. ${book.title}`,
+    suformuotaData: moment(book.year).format('MMMM Do YYYY, h:mm:ss a'),
+    kategorija: book.category
+  }
+}
+
+// const mapToBook = (book) => {
+//   let newBook = {};
+
+//   const title = book.title ? book.title : null;
+//   const author = book.author ? book.author : null;
+//   const year = book.year ? book.year : null;
+//   const category = book.category ? book.category : null;
+//   const bestSeller = book.bestSeller ? book.bestSeller : null;
+
+//   if (title) {
+//     newBook = Object.assign(newBook, { title: title });
+//   }
+
+//   if (author) {
+//     newBook = Object.assign(newBook, { author: author });
+//   }
+
+//   if (year) {
+//     newBook = Object.assign(newBook, { year: year });
+//   }
+
+//   if (category) {
+//     newBook = Object.assign(newBook, { category: category });
+//   }
+
+//   if (bestSeller) {
+//     newBook = Object.assign(newBook, { bestSeller: bestSeller });
+//   }
+
+//   return newBook;
+// };
 
 module.exports = router; // eksportuojam kad butu pasiekiama kituose failuose
