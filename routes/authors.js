@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       res.status(500).send(error.message);
     } else {
       console.log(authors);
-      res.send(authors);
+      res.send(authors.map(author => mapToAuthor(author)));
     }
   })
 })  // ++ 
@@ -53,7 +53,7 @@ router.put('/:id', (req, res) => {
         res.status(500).send(error.message);
       } else {
         console.log(author);
-        res.status(200).send(author);
+        res.status(200).send(mapToAuthor(author));
       }
     }
   )
@@ -62,40 +62,29 @@ router.put('/:id', (req, res) => {
 
 
 
-router.delete('/:id', (req, res) => res.send('Istriname viena autoriu pagal ID'));
+router.delete('/:id', (req, res) => {
+  console.log('Istriname viena autoriu pagal ID');
+  Author.findByIdAndRemove(
+    { _id: req.params.id },
+    (error, success) => {
+      if (error) {
+        res.status(500).send(error.message);
+      } else {
+        console.log(success);
+        res.status(200).send(success);
+      }
+    }
+  )
+});
 
 
 
 const mapToAuthor = (author) => {
-  let newAuthor = {};
-
-  const name = book.name ? book.name : null;
-  const category = book.category ? book.category : null;
-  const city = book.city ? book.city : null;
-  const bookCount = book.bookCount ? book.bookCount : null;
-  const phone = book.phone ? book.phone : null;
-
-  if (name) {
-    newBook = Object.assign(newBook, { name: name });
+  return {
+    vardasPavarde: author.name,
+    kategorija: author.category,
+    kiekKnyguIsleista: author.bookCount
   }
-
-  if (category) {
-    newBook = Object.assign(newBook, { category: category });
-  }
-
-  if (city) {
-    newBook = Object.assign(newBook, { city: city });
-  }
-
-  if (bookCount) {
-    newBook = Object.assign(newBook, { bookCount: bookCount });
-  }
-
-  if (phone) {
-    newBook = Object.assign(newBook, { phone: phone });
-  }
-
-  return newBook;
 };
 
 module.exports = router;

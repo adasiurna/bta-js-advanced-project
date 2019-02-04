@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 
 
 router.get('/bestseller', (req, res) => {
-  console.log('Grazinam visus bestselerius');
+  console.log('Grazinam visus bestselerius, ar veikia nodemonas?');
 
   Book.find({ bestSeller: true }).exec((error, books) => {
     if (error) {
@@ -71,7 +71,7 @@ router.post('/', (req, res) => {
 
 
 router.put('/:id', (req, res) => {
-  console.log('Atnaujinam pasirinkita knyga pagal ID');
+  console.log('Atnaujinam pasirinkta knyga pagal ID');
   Book.findByIdAndUpdate(
     { _id: req.params.id },
     {
