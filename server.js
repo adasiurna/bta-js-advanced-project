@@ -6,7 +6,7 @@ const moment = require('moment');
 moment.locale('lt');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // process.env.PORT vietoje atsiras heroku portas
 
 const databaseUser = 'bta-studentas';
 const databasePassword = 'studentas123';
