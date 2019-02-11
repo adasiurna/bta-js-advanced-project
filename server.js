@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -16,11 +17,22 @@ const databasePort = 59682;
 const booksRoutes = require('./routes/books');
 const authorsRoutes = require('./routes/authors');
 
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
 })
 );
+
+// cors config
+app.get('/products/:id', function (req, res, next) {
+  res.json({ msg: 'This is CORS-enabled for all origins!' })
+})
+
+app.listen(80, function () {
+  console.log('CORS-enabled web server listening on port 80')
+})
 
 // database config
 mongoose.connect(

@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 router.get('/bestseller', (req, res) => {
   console.log('Grazinam visus bestselerius, ar veikia nodemonas?');
+  console.log('neveikia nodemonas');
 
   Book.find({ bestSeller: true }).exec((error, books) => {
     if (error) {
