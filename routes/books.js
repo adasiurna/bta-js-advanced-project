@@ -109,8 +109,10 @@ router.delete('/:id', (req, res) => {
 
 const mapToBook = book => {
   return {
-    pavadinimas: `${book.author}. ${book.title}`,
-    suformuotaData: moment(book.year).format('MMMM Do YYYY, h:mm:ss a'),
+    id: book.id,
+    pavadinimas: book.title,
+    autorius: book.author,
+    suformuotaData: moment(book.year).format('YYYY'),
     kategorija: book.category
   }
 }
