@@ -1,1 +1,2 @@
-"# bta-js-advanced-project" 
+# bta-js-advanced-project
+node/react project for learning purposes
